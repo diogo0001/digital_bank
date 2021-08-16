@@ -9,15 +9,15 @@ namespace DigitalBank.DataAcesss
 {
     public class Query
     {
-        public List<User> AllUserOnly([Service] UserRepository userRepository) => userRepository.GetUsers();
+        public List<User> Usuarios([Service] UserRepository userRepository) => userRepository.GetUsers();
 
-        public List<User> AllUserWithAccounts([Service] UserRepository userRepository) =>
+        public List<User> UsuariosContas([Service] UserRepository userRepository) =>
             userRepository.GetUsersWithAccounts();
 
-        public List<Account> AllAccountsOnly([Service] AccountRepository accountRepository) =>
+        public List<Account> Contas([Service] AccountRepository accountRepository) =>
             accountRepository.GetAllAccounts();
 
-        public async Task<Account> AccountDataByAccountNumber([Service] AccountRepository accountRepository,
+        public async Task<Account> DadosDaConta([Service] AccountRepository accountRepository,
             [Service] ITopicEventSender eventSender, int accountNumber)
         {
             Account gottenAccount = accountRepository.GetAccountDataByAccountNumber(accountNumber);

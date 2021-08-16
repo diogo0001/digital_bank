@@ -18,7 +18,6 @@ namespace DigitalBank.DataAcesss.Repositories
             _appDbContext = AppDbContext;
         }
 
-
         // sacar
         public Account TakeValueAwayByAccountNumber(int accountNumber, int takeAwaiValue)
         {
@@ -29,7 +28,7 @@ namespace DigitalBank.DataAcesss.Repositories
                     .Where(e => e.AccountNumber == accountNumber)
                     .FirstOrDefault();
 
-                if (takeAwaiValue < 0) throw new CustomExeption("Valor inválido!");
+                if (takeAwaiValue < 0) return null;     // throw new CustomExeption("Valor inválido!");
                 if (Account == null) throw new CustomExeption("Conta não encontrada!");
 
 
@@ -60,8 +59,8 @@ namespace DigitalBank.DataAcesss.Repositories
                     .Include(e => e.User)
                     .Where(e => e.AccountNumber == accountNumber)
                     .FirstOrDefault();
-            
-                if(addValue < 0) throw new CustomExeption("Valor inválido!");
+
+                if (addValue < 0) return null;  // throw new CustomExeption("Valor inválido!");
                 if (Account == null) throw new CustomExeption("Conta não encontrada!");
 
                 Account.AccountValue += addValue;

@@ -11,14 +11,14 @@ namespace DigitalBank.DataAcesss
     public class Subscription
     {
         [SubscribeAndResolve]
-        public async ValueTask<ISourceStream<Account>> OnCreateAccount([Service] ITopicEventReceiver eventReceiver,
+        public async ValueTask<ISourceStream<Account>> AoCriarConta([Service] ITopicEventReceiver eventReceiver,
     CancellationToken cancellationToken)
         {
             return await eventReceiver.SubscribeAsync<string, Account>("AccountCreated", cancellationToken);
         }
 
         [SubscribeAndResolve]
-        public async ValueTask<ISourceStream<User>> OnCreateUser([Service] ITopicEventReceiver eventReceiver,
+        public async ValueTask<ISourceStream<User>> AoCriarUsuario([Service] ITopicEventReceiver eventReceiver,
    CancellationToken cancellationToken)
         {
             return await eventReceiver.SubscribeAsync<string, User>("UserCreated", cancellationToken);

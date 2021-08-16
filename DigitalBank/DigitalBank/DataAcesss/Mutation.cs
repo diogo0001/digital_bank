@@ -8,7 +8,7 @@ namespace DigitalBank.DataAcesss
 {
     public class Mutation
     {
-        public async Task<Account> TakeValueAwayByAccountNumber([Service] AccountRepository accountRepository,
+        public async Task<Account> Sacar([Service] AccountRepository accountRepository,
     [Service] ITopicEventSender eventSender, int accountNumber, int takeAwayValue)
         {
             Account gottenAccount = accountRepository.TakeValueAwayByAccountNumber(accountNumber, takeAwayValue);
@@ -16,7 +16,7 @@ namespace DigitalBank.DataAcesss
             return gottenAccount;
         }
 
-        public async Task<Account> DepositValueByAccountNumber([Service] AccountRepository accountRepository,
+        public async Task<Account> Depositar([Service] AccountRepository accountRepository,
     [Service] ITopicEventSender eventSender, int accountNumber, int takeAwayValue)
         {
             Account gottenAccount = accountRepository.DepositValueByAccountNumber(accountNumber, takeAwayValue);
