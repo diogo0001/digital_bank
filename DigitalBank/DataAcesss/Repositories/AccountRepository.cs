@@ -20,81 +20,62 @@ namespace DigitalBank.DataAcesss.Repositories
 
         // sacar
         public Account TakeValueAwayByAccountNumber(int accountNumber, int takeAwaiValue)
-        {
-            try
+        {           
+            var Account = _appDbContext.Account
+                .Include(e => e.User)
+                .Where(e => e.AccountNumber == accountNumber)
+                .FirstOrDefault();
+
+            if (takeAwaiValue < 0)  throw new Exception("Valor inválido!"); 
+            if (Account == null)   throw new Exception("Conta não encontrada!"); 
+
+            if (takeAwaiValue <= Account.AccountValue)
             {
-                var Account = _appDbContext.Account
-                    .Include(e => e.User)
-                    .Where(e => e.AccountNumber == accountNumber)
-                    .FirstOrDefault();
-
-                if (takeAwaiValue < 0) return null;     // throw new CustomExeption("Valor inválido!");
-                if (Account == null) throw new CustomExeption("Conta não encontrada!");
-
-
-                if (takeAwaiValue <= Account.AccountValue)
-                {
-                    Account.AccountValue -= takeAwaiValue;
-                    _appDbContext.Update(Account);
-                    _appDbContext.SaveChangesAsync();
-
-                    return Account;
-                }
-                else
-                {
-                    throw new CustomExeption("Saldo insuficiente!");
-                }
-            }
-            catch (Exception e)
-            {
-                throw new Exception("Problema ao realizar a transação!", e);
-            }
-        }
-
-        // depositar
-        public Account DepositValueByAccountNumber(int accountNumber, int addValue)
-        {
-            try { 
-                var Account = _appDbContext.Account
-                    .Include(e => e.User)
-                    .Where(e => e.AccountNumber == accountNumber)
-                    .FirstOrDefault();
-
-                if (addValue < 0) return null;  // throw new CustomExeption("Valor inválido!");
-                if (Account == null) throw new CustomExeption("Conta não encontrada!");
-
-                Account.AccountValue += addValue;
+                Account.AccountValue -= takeAwaiValue;
                 _appDbContext.Update(Account);
                 _appDbContext.SaveChangesAsync();
 
                 return Account;
             }
-            catch (Exception e)
+            else
             {
-                throw new Exception("Problema ao realizar a transação!", e);
-            }
+                throw new Exception("Saldo insuficiente!");
+            }           
+        }
+
+        // depositar
+        public Account DepositValueByAccountNumber(int accountNumber, int addValue)
+        {
+            
+            var Account = _appDbContext.Account
+                .Include(e => e.User)
+                .Where(e => e.AccountNumber == accountNumber)
+                .FirstOrDefault();
+
+            if (addValue < 0) throw new Exception("Valor inválido!");
+            if (Account == null) throw new Exception("Conta não encontrada!");
+
+            Account.AccountValue += addValue;
+            _appDbContext.Update(Account);
+            _appDbContext.SaveChangesAsync();
+
+            return Account;            
         }
 
         // saldo
         public Account GetAccountDataByAccountNumber(int accountNumber)
-        {
-            try { 
-                var Account = _appDbContext.Account
-                    .Include(e => e.User)
-                    .Where(e => e.AccountNumber == accountNumber)
-                    .FirstOrDefault();
+        {            
+            var Account = _appDbContext.Account
+                .Include(e => e.User)
+                .Where(e => e.AccountNumber == accountNumber)
+                .FirstOrDefault();
 
-                if (Account != null)
-                {                
-                    return Account;
-                }
+            if (Account != null)
+            {                
+                return Account;
+            }
 
-                throw new CustomExeption("Conta não encontrada!");
-            }
-            catch (Exception e)
-            {
-                throw new Exception("Problema ao realizar a transação!", e);
-            }
+            throw new Exception("Conta não encontrada!");
         }
 
         public List<Account> GetAllAccounts()
@@ -106,12 +87,7 @@ namespace DigitalBank.DataAcesss.Repositories
                 return Account;
             }
 
-            throw new CustomExeption("Nenhuma conta encontrada!");
-        }
-
-        private class CustomExeption : Exception
-        {
-            public CustomExeption(string message) : base(message){}
+            throw new Exception("Nenhuma conta encontrada!");
         }
     }
 }

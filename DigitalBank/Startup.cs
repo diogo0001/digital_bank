@@ -1,6 +1,7 @@
 using DigitalBank.DataAcesss;
 using DigitalBank.DataAcesss.Entities;
 using DigitalBank.DataAcesss.Repositories;
+using DigitalBank.Handlers;
 using HotChocolate;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -14,7 +15,6 @@ namespace DigitalBank
     public class Startup
     {
         private readonly string AllowedOrigin = "allowedOrigin";
-
 
         public Startup(IConfiguration configuration)
         {
@@ -36,6 +36,8 @@ namespace DigitalBank
                 .AddQueryType<Query>()
                 .AddMutationType<Mutation>()
                 .AddSubscriptionType<Subscription>();
+
+            services.AddErrorFilter<GraphQLErrorFilter>();
 
             services.AddScoped<AccountRepository, AccountRepository>();
             services.AddScoped<UserRepository, UserRepository>();
