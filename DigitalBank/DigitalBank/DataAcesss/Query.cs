@@ -2,9 +2,7 @@
 using DigitalBank.DataAcesss.Repositories;
 using HotChocolate;
 using HotChocolate.Subscriptions;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace DigitalBank.DataAcesss
@@ -15,6 +13,9 @@ namespace DigitalBank.DataAcesss
 
         public List<User> AllUserWithAccounts([Service] UserRepository userRepository) =>
             userRepository.GetUsersWithAccounts();
+
+        public List<Account> AllAccountsOnly([Service] AccountRepository accountRepository) =>
+            accountRepository.GetAllAccounts();
 
         public async Task<Account> AccountDataByAccountNumber([Service] AccountRepository accountRepository,
             [Service] ITopicEventSender eventSender, int accountNumber)
