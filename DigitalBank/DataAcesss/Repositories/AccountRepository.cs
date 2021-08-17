@@ -1,5 +1,4 @@
 ﻿using DigitalBank.DataAcesss.Entities;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -19,12 +18,13 @@ namespace DigitalBank.DataAcesss.Repositories
         }
 
         // sacar
-        public Account TakeValueAwayByAccountNumber(int accountNumber, int takeAwaiValue)
+        public async Task<Account> TakeValueAwayByAccountNumber(int accountNumber, int takeAwaiValue)
         {           
             var Account = _appDbContext.Account
                 .Include(e => e.User)
                 .Where(e => e.AccountNumber == accountNumber)
                 .FirstOrDefault();
+            
 
             if (takeAwaiValue < 0)  throw new Exception("Valor inválido!"); 
             if (Account == null)   throw new Exception("Conta não encontrada!"); 
@@ -33,7 +33,7 @@ namespace DigitalBank.DataAcesss.Repositories
             {
                 Account.AccountValue -= takeAwaiValue;
                 _appDbContext.Update(Account);
-                _appDbContext.SaveChangesAsync();
+                await _appDbContext.SaveChangesAsync();
 
                 return Account;
             }
@@ -44,9 +44,8 @@ namespace DigitalBank.DataAcesss.Repositories
         }
 
         // depositar
-        public Account DepositValueByAccountNumber(int accountNumber, int addValue)
-        {
-            
+        public async Task<Account> DepositValueByAccountNumber(int accountNumber, int addValue)
+        {                       
             var Account = _appDbContext.Account
                 .Include(e => e.User)
                 .Where(e => e.AccountNumber == accountNumber)
@@ -57,7 +56,7 @@ namespace DigitalBank.DataAcesss.Repositories
 
             Account.AccountValue += addValue;
             _appDbContext.Update(Account);
-            _appDbContext.SaveChangesAsync();
+            await _appDbContext.SaveChangesAsync();
 
             return Account;            
         }
